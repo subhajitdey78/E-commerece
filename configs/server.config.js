@@ -1,5 +1,5 @@
 if(proocess.env.NODE_ENV != 'production') {
-    require('ditenv').config();
+    require('dotenv').config();
     }
     module.exports = {
         PORT: process.env.PORT
