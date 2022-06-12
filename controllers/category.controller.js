@@ -6,33 +6,33 @@
  */
 
 
-const { category } = require("../models");
+
+
 const db = require("../models");
-const Category = db. category;
+const Category = db.category;
 
 /**
  * POST: Create and save a new category
  */
 exports.create = (req, res) => {
     /**
-     * Validation of request body
+     * validation of request body
      */
+
     if(!req.body.name) {
-        res.status(400) .send( {
-            message: "Name of the category can't be empty"
+        res.status(400).send ( {
+            message: "name of the category can't be empty !"
 
         })
         return;
-            }
+    }
         
-            /**
-             * Creation of the category object to be stored in the db.
-             */
-
+            
             const category = {
                 name: req.body.name,
                 description: req.body.description
             };
+
             Category.create(category)
             .then(category => {
                 console.log(`category name: [$category.name] got inserted`)
@@ -50,10 +50,9 @@ exports.create = (req, res) => {
 /**
  * Get a list of all the categories
  */
-
 exports.findAll = (req, res) => {
 
-    let categoryName = rq.query.name;
+    let categoryName = req.query.name;
     let promise;
     if(categoryName) {
         promise = ategory.findAll({
@@ -95,7 +94,7 @@ exports.findOne = (req, res) => {
 }
 
 /**
- * Upadte the existing  category
+ * Updatre the existing  category
  */
 exports.update = (req, res) => {
 
@@ -109,6 +108,7 @@ exports.update = (req, res) => {
       wher: {id: categoryId}
     })
         .then(updatedcategory => {
+            
         //where the updation happened successfuly.
         //you need to send  the updayted row to the table.
         //But while fetching that row and sending it to user.
@@ -130,7 +130,31 @@ exports.update = (req, res) => {
                 message:"Some internal error while updating the category"
             })
         })
-    }    
+    }  
+    
+    /**
+     * Delete an existing category based on the category name
+     */
 
+    exports.delete = (req, res) => {
+        const categoryId = req.params.id;
 
+        Category.destroy({
+            where: {
+                id: categoryId
+            }
+        })
+        .then(result => {
+            res.status(200).send({
+                message: "Successfully deleted the category"
+            })
+        })
+        .catch (err => {
+             res.status(500).send({
+        message: "Some internal error while deleting the category based on id"
+             })
+            })
+    }
+
+           
             
