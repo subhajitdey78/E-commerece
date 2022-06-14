@@ -33,8 +33,10 @@ exports.create = (req, res) => {
 const product = {
     name: req.body.name,
     description: req.body.description,
-    cost: req.body.cost
+    cost: req.body.cost,
+    categoryId: req.body.categoryId
 }
+ 
 Product.create(product)
 .then(product => {
     console.log(`product name: [${product.name}] got inserted in db`);
@@ -53,30 +55,63 @@ Product.create(product)
  
 exports.findAll = (req,res) => {
 
-    console.log(res.query);
-    let productNaame = req.query.name;
+  
+    
+    let productName = req.query.name;
+    let minCost = req.query.minCost; //null
+    let maxCost = req.query.maxcost; //null
     let promise;
 
     if(productName) {
         promise = Product.findAll({
-          where: {
-            name: productName
-          }            
-        })
-    }else{
-        promise = product.findAll();
+            where: {
+                name: productName
             }
+        })
+    }else if(minCost && maxCost) {
+        promise = Product.findAll({
+            where: {
+                cost: {
+                    [Op.gte] : minCost,
+                    [Op.lte] : maxCost
+
+                }
+            }
+        })
+               
+    }else if(minCost) {
+        promise = Product.findAll({
+            where: {
+                cost: {
+                    [Op.gte] : minCost
+                }
+            }
+            })
+        }else if (maxCost) {
+            promise = Product.findAll({
+                where: {
+                    cost: {
+                        [Op.lte] : maxCost
+                    }
+                }
+            })   
+        
+        }
+        else{
+        promise = Product.findAll()
+        }
         promise
-        .then(products => {
-            res.status(200).send(products);
-                    })
-              .catch(err => {
-                res.status(500).send(
-                    {
-                        message: "Some internal error while fetching all the products"
-                    })
-                })
-            }  
+    .then(products => {
+        res.status(200).send(products);
+    })
+    .catch(err => {
+        res.status(500).send({
+            message: "Some internal error while fetching all the products"
+        })
+    })
+}
+
+
      /**
 * Get a category based on the product id
 */

@@ -20,6 +20,9 @@ app.use(bodyParser.json());
 */
 const db = require("./models");
 const Category = db.category;
+const product = db.product;
+
+Category.hasMany(product); // This wiill create a foreign key column (category) 
 
 
 

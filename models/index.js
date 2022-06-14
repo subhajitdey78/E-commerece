@@ -43,8 +43,4 @@ db.product = require('./product.model.js')(db.sequelize, Sequelize);
  * product: function(){
  * }
  */
-
-
-
-
 module.exports = db;
