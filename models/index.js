@@ -32,15 +32,19 @@ db.Sequelize = Sequelize;
 db.sequelize = seq;
 db.category = require('./category.model.js')(db.sequelize, Sequelize);
 db.product = require('./product.model.js')(db.sequelize, Sequelize);
-
+db.user = require('./user.model.js')(db.sequelize, Sequelize);
+db.role = require('./role.model.js')(db.sequelize, Sequelize);
 /**
- * db = {
- * Sequelize;
- * sequelize;
- * category: function() {
- * 
- * }
- * product: function(){
- * }
+ * Establish the relationship between Role and the User
  */
+db.role.belongsToMany(b.user, {
+    through: "user_roles",
+    foreignKey: "roleId",
+    })
+    db.user.belongToMany(db.role, {
+        through: "user_roles",
+        foreignKey: "userId"
+    })
+
+    
 module.exports = db;

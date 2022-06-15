@@ -136,20 +136,12 @@ exports.findone = ( req, res) => {
 
     exports.update = (req, res) => {
 
-        if(!req.body.name) {
-            res.status(400).send({
-                message: "Name of the product connot be empty"
-            })
-        }
-        if(!req.body.cost) {
-            res.status(400).send({
-            message: "Cost of the product cannot be empty"
-        })
-    }
+        
     const product = {
         name: req.body.name,
         description: req.body.description,
-        codst: req.body.codst
+        codst: req.body.cost,
+        categoryId: req.body.categoryId
     }
        const productId = req.params.id;
        
@@ -192,7 +184,27 @@ exports.findone = ( req, res) => {
             })
          }
 
-            
-
+      /**Get the list of all the products under a category */      
+ 
+      exports.getProductsUnderCategory = (req, res) => {
+        const categoryId = parseInt(req.params.categoryId);
+         
+        //select * from product where categoryID = categoryId
+      Product.findAll({
+        where: {
+            categoryId: categoryId
+        }
+      })
+      .then(products => {
+        res.status(200).send(products);
+              })
+              .catch(err => {
+                res.status(500).send({
+                    message: "Some internal error while fetching the product based on category"
+                })
+            })
+        }
+                          
+     
             
                            
