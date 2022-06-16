@@ -19,6 +19,7 @@ app.use(bodyParser.json());
  * Initialising the database
 */
 const db = require("./models");
+const { role } = require('./models');
 const Category = db.category;
 const product = db.product;
 
@@ -50,10 +51,23 @@ function init() {
         .catch(err => {
             console.log("Error while initialising categories table");
         })
+
+        /**
+         * Adding Roles
+         */
+        Role.create({
+            id: 1,
+            name: "user"
+        });
+        Role.create({
+            id: 2,
+            name: "admin"
+        })
 }
 
 require('./routes/category.routes')(app)
 require('./routes/product.routes')(app)
+require('./routes/auth.routes')(app)
 
 app.listen(serverConfig.PORT, () => {
     console.log(`Application started on the port no : ${serverConfig.PORT}`)

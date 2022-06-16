@@ -43,8 +43,8 @@ db.role.belongsToMany(b.user, {
     })
     db.user.belongToMany(db.role, {
         through: "user_roles",
-        foreignKey: "userId"
+        foreignKey: "id"
     })
-
+db.ROLES = ["user", "admin"]
     
 module.exports = db;
