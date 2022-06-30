@@ -10,7 +10,8 @@
 *
 */
  
-const config = require("../configs/db.config");
+const env = process.env.NODE_ENV ||'development'; //env -> production, development
+const config = require("../configds/db.config")[env];
 const Sequelize = require("sequelize");
 
 /**
